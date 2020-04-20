@@ -1,0 +1,40 @@
+version: "3.2"
+services:
+    rabbitmq-server:
+        image: rabbitmq:3-management
+        container_name: my-rabbitmq
+        hostname: my-rabbitmq
+        ports: 
+            - "8080:15672"
+        environment: 
+            - RABBITMQ_DEFAULT_VHOST=my-rabbitmq
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin
+
+    # auth-service:
+    #     build: ./auth-service
+    #     depends_on:
+    #         - rabbitmq-server
+    #     # Keep it running.  
+    #     tty: true
+    #     volumes:
+    #         - './auth-service:/auth-service'
+    
+    database:
+        image: postgres
+        restart: always
+        container_name: my-postgres
+        environment: 
+            - POSTGRES_PASSWORD=admin
+    
+    db-admin:
+        image: adminer
+        container_name: my-postgres-adminer
+        restart: always
+        ports:
+            - 8000:8080
+
+
+# # Host volumes used to store code.
+# volumes:
+#     auth-service:
